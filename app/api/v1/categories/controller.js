@@ -52,22 +52,25 @@ const update = async (req, res, next) => {
   const { name } = req.body;
   
   try {
-    // const categoryById = await Categories.findOne({ _id: id });
-  
-    // if (!categoryById) {
-    //   return res.status(404).json({
-    //     message: 'Id category tidak ditemukan',
-    //   });
-    // }
-  
-    // categoryById.name = name;
-    // await categoryById.save();
-
-    const updatedCategory = await Categories.findByIdAndUpdate({ _id: id }, { name }, {
-      new: true,
+    const updatedCategory = await Categories.findOneAndUpdate({ _id: id }, { name }, {
+      new: true, runValidators: true,
     });
     res.status(200).json({
       data: updatedCategory,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// delete category
+const destroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // ini kalau id nya salah malah nge remove category pertama coy
+    const result = await Categories.findOneAndRemove(id);
+    res.status(200).json({
+      data: result,
     });
   } catch (err) {
     next(err);
@@ -79,4 +82,5 @@ module.exports = {
   create,
   find,
   update,
+  destroy,
 };
