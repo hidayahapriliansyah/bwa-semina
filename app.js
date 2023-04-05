@@ -18,12 +18,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', (req, res) => {
-  res.status(200).json({
-    message: 'Welcom to API Semina',
-  })
-});
+// app.use('/', (req, res) => {
+//   res.status(200).json({
+//     message: 'Welcom to API Semina',
+//   })
+// });
 
 app.use(v1, categoriesRouter);
+
+app.use(notFoundMiddleware);
+app.use(handlerErrorMiddleware);
 
 module.exports = app;

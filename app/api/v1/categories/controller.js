@@ -1,13 +1,13 @@
 const Categories = require('./model');
+const { getAllCategories, createCategories } = require('../../../services/mongoose/categories');
 
 const create = async (req, res, next) => {
-  const { name } = req.body;
-
-  const result = await Categories.create({ name });
-  res.status(201).json({
-    data: result,
-  });
   try {
+    const result = await createCategories(req);
+  
+    res.status(201).json({
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -15,8 +15,9 @@ const create = async (req, res, next) => {
 
 // get all cateogries
 const index = async (req, res, next) => {
+  console.log('Index get ALl categories');
   try {
-    const result = await Categories.find().select('_id name');
+    const result = await getAllCategories();
     res.status(200).json({
       data: result,
     });
@@ -27,9 +28,9 @@ const index = async (req, res, next) => {
 
 // find category by id
 const find = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
+
     const result = await Categories.findOne({ _id: id }).select('_id name');
     
     if (!result) {
