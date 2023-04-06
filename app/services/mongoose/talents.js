@@ -9,7 +9,7 @@ const getAllTalents = async (req) => {
 
   // condition digunakan untuk filter kayaknya deh xexexe
   if (keyword) {
-    condition = { ...condition, name: { $regex: keyword, $option: 'i' } };
+    condition = { ...condition, name: { $regex: keyword, $options: 'i' } };
   }
 
   const result = await Talents.find(condition)

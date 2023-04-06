@@ -22,7 +22,6 @@ const create = async (req, res, next) => {
 
 // get all cateogries
 const index = async (req, res, next) => {
-  console.log('Index get ALl categories');
   try {
     const result = await getAllCategories();
     res.status(StatusCodes.OK).json({
