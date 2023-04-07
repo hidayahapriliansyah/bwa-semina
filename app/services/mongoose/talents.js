@@ -33,9 +33,9 @@ const createTalents = async (req) => {
 
   // apabila check true / data talent sudah ada, maka tampilkan error bad request dengan message pembicara sudah terdaftar
   if (check) throw new BadRequestError('Pembicara sudah terdaftar');
-
+  
   const result = await Talents.create({ name, role, image });
-
+  
   return result;
 };
 
@@ -66,6 +66,8 @@ const updateTalents = async (req) => {
     name,
     _id: { $ne: id },
   });
+  
+  if (check) throw new BadRequestError('Pembicara sudah terdaftar');
 
   const result = await Talents.findOneAndUpdate(
     { _id: id },
@@ -89,8 +91,7 @@ const deleteTalents = async (req) => {
   return result;
 };
 
-const checkingTalents = async (req) => {
-  const { id } = req.params;
+const checkingTalents = async (id) => {
   const result = await Talents.findOne({ _id: id });
   if (!result) throw new NotFoundError(`Tidak ada pembicara dengan id : ${id}`);
   return result;
