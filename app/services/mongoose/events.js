@@ -128,9 +128,15 @@ const updateEvents = async (req) => {
   await checkingCategories(category);
   await checkingTalents(talent);
 
+  // tambahan pengecekana apakah id benar atau tidak
+  // kalau di cek di chek findOne $ne mah id salah gak ke check nya jadi ada isinya
+  const checkIdEvent = await Events.findOne({ _id: id });
+  if (!checkIdEvent) throw new NotFoundError(`Tidak ada acara dengan id: ${id}`);
+
   // cari event dengan field name
   const check = await Events.findOne({ title, _id: { $ne: id } });
 
+  console.log(check);
   if (check) throw new BadRequestError('Judul acara sudah terdaftar');
 
   const result = await Events.findOneAndUpdate(
@@ -150,8 +156,6 @@ const updateEvents = async (req) => {
     },
     { new: true, runValidators: true },
   );
-
-  if (!result) throw new NotFoundError(`Tidak ada acara dengan id: ${id}`);
 
   return result;
 };
