@@ -21,7 +21,7 @@ const authenticateUser = async (req, res, next) => {
       email: payload.email,
       role: payload.role,
       name: payload.name,
-      organizer: payload.name,
+      organizer: payload.organizer,
       id: payload.userId,
     }
 
@@ -31,8 +31,15 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-const authorizeRoles = (...role) => {
+const authorizeRoles = (...roles) => {
   return (req, res, next) => {
+    /**
+      req.user.role akan berisi role dari akun yang masuk seperti admin, atau organizer
+      nah jika kita memasukkan argumen ke dalam ..roles misal 'organizer' maka  
+      akun dengan role organizer akan bisa akses route dengan middleeware ini.
+      kenapa bisa? karena nilai roles akan dicocokan dengan role akun yang masuk yang
+      dibawa token hasil middleware authenticateUser
+     */
     if (!roles.includes(req.user.role)) {
       throw new UnauthorizedError('Unauthorized to access this route');
     }
