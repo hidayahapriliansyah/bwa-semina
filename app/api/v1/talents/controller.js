@@ -1,16 +1,15 @@
 const { StatusCodes } = require('http-status-codes');
-
 const {
-  getAllCategories,
-  createCategories,
-  getOneCategories,
-  updateCategories,
-  deleteCategories
-} = require('../../../services/mongoose/categories');
+  getAllTalents,
+  createTalents,
+  getOneTalents,
+  updateTalents,
+  deleteTalents,
+} = require('../../../services/mongoose/talents');
 
 const create = async (req, res, next) => {
   try {
-    const result = await createCategories(req);
+    const result = await createTalents(req);
   
     res.status(StatusCodes.CREATED).json({
       data: result,
@@ -23,7 +22,7 @@ const create = async (req, res, next) => {
 // get all cateogries
 const index = async (req, res, next) => {
   try {
-    const result = await getAllCategories(req);
+    const result = await getAllTalents(req);
     res.status(StatusCodes.OK).json({
       data: result,
     });
@@ -35,7 +34,7 @@ const index = async (req, res, next) => {
 // find category by id
 const find = async (req, res, next) => {
   try {
-    const result = await getOneCategories(req);
+    const result = await getOneTalents(req);
 
     res.status(StatusCodes.OK).json({
       data: result,
@@ -48,7 +47,7 @@ const find = async (req, res, next) => {
 // update category
 const update = async (req, res, next) => {
   try {
-    const result = await updateCategories(req);
+    const result = await updateTalents(req);
 
     res.status(StatusCodes.OK).json({
       data: result,
@@ -63,7 +62,7 @@ const destroy = async (req, res, next) => {
   try {
     const { id } = req.params;
     // ini kalau id nya salah malah nge remove category pertama coy
-    const result = await deleteCategories(req);
+    const result = await deleteTalents(req);
     res.status(StatusCodes.OK).json({
       data: result,
     });
