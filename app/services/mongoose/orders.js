@@ -22,7 +22,7 @@ const getAllOrders = async (req) => {
     .limit(limit)
     .skip(limit * (page - 1));
 
-  const count = await Orders.coundDocuments(condition);
+  const count = await Orders.countDocuments(condition);
 
   return {
     data: result,
