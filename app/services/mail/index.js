@@ -4,7 +4,7 @@ const { gmail, password } = require('../../config');
 const fs = require('fs');
 
 const transporter = nodemailer.createTransport({
-  host: 'stmp.gmail.com',
+  host: 'smtp.gmail.com',
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
@@ -26,6 +26,7 @@ const otpMail = async (email, data) => {
 
     return await transporter.sendMail(message); 
   } catch (ex) {
+    console.log('error sending email');
     console.log(ex);
   }
 };
