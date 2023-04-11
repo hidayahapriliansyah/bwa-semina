@@ -23,7 +23,7 @@ const authenticateUser = async (req, res, next) => {
       name: payload.name,
       organizer: payload.organizer,
       id: payload.userId,
-    }
+    };
 
     next();
   } catch (err) {
@@ -47,7 +47,35 @@ const authorizeRoles = (...roles) => {
   };
 };
 
+const authenticateParticipant = async (req, res, next) => {
+  try {
+    let token;
+
+    const authHeader = req.headers.authorization;
+
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      token = authHeader.split(' ')[1];
+    }
+
+    if (!token) {
+      throw new UnauthenticatedError('Authentication invalid');
+    }
+
+    const payload = isTokenValid({ token });
+
+    req.user = {
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      participantId: payload._id,
+      email: payload.email,
+    };
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   authenticateUser,
+  authenticateParticipant,
   authorizeRoles,
 };
