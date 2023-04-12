@@ -1,4 +1,6 @@
 const Participants = require('../../api/v1/participants/model');
+const Events = require('../../api/v1/events/model');
+const Orders = require('../../api/v1/orders/model');
 const { otpMail } = require('../mail');
 const {
   NotFoundError,
@@ -95,8 +97,37 @@ const signinParticipant = async (req) => {
   return token;
 };
 
+const getAllEvents = async (req) => {
+  const result = await Events.find({ statusEvent: 'Published' })
+    .populate('category')
+    .populate('image')
+    .select('_id title date tickets venueName');
+
+  return result;
+};
+
+const getOneEvent = async (req) => {
+  const { id } = req.params;
+  const result = await Events.findOne({ _id: req.params.id })
+    .populate('category')
+    .populate('talent')
+    .populate('image');
+
+  if (!result) throw new NotFoundError(`Tidak ada acara dengan id: ${id}`);
+
+  return result;
+};
+
+const getAllOrders = async (req) => {
+  const result = await Orders.find({ participant: req.user.id });
+  return result;
+};
+
 module.exports = {
   signupParticipant,
   activateParticipant,
   signinParticipant,
+  getAllEvents,
+  getOneEvent,
+  getAllOrders,
 };
