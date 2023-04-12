@@ -6,6 +6,7 @@ const {
   getAllEvents,
   getOneEvent,
   getAllOrders,
+  checkOutOrder,
 } = require('../../../services/mongoose/participants');
 
 const signup = async (req, res, next) => {
@@ -80,6 +81,18 @@ const getDetailLandingPage = async (req, res, next) => {
   }
 };
 
+const checkout = async (req) => {
+  try {
+    const result = await checkOutOrder(req);
+
+    res.status(StatusCodes.CREATED).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   signup,
   activeParticipant,
@@ -87,4 +100,5 @@ module.exports = {
   getAllLandingPage,
   getDashboard,
   getDetailLandingPage,
+  checkout,
 };
