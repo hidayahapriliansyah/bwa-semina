@@ -119,7 +119,9 @@ const getOneEvent = async (req) => {
 };
 
 const getAllOrders = async (req) => {
-  const result = await Orders.find({ participant: req.user.id });
+  console.log('getAllOrders');
+  console.log(req.participant);
+  const result = await Orders.find({ participant: req.participant.id });
   return result;
 };
 
