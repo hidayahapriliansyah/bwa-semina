@@ -124,6 +124,7 @@ const getAllOrders = async (req) => {
   return result;
 };
 
+// TODO KIRIM SEND EMAIL INVOICE
 const checkOutOrder = async (req) => {
   const { event, personalDetail, payment, tickets } = req.body;
 
@@ -148,7 +149,7 @@ const checkOutOrder = async (req) => {
           ticket.stock -= tic.sumTicket;
 
           totalOrderTicket += tic.sumTicket;
-          totalPay += (tic.ticketCategories.price * ticket.sumTicket);
+          totalPay += tic.ticketCategories.price * tic.sumTicket;
         }
       }
     });
@@ -172,10 +173,11 @@ const checkOutOrder = async (req) => {
 
   const result = new Orders({
     date: new Date(),
+    payment,
     personalDetail: personalDetail,
     totalPay,
     totalOrderTicket,
-    ordertItem: tickets,
+    orderItems: tickets,
     participant: req.participant.id,
     event,
     historyEvent,

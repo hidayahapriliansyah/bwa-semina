@@ -81,7 +81,7 @@ const getDetailLandingPage = async (req, res, next) => {
   }
 };
 
-const checkout = async (req) => {
+const checkout = async (req, res, next) => {
   try {
     const result = await checkOutOrder(req);
 
