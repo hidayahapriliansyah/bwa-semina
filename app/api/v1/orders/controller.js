@@ -6,8 +6,8 @@ const index = async (req, res, next) => {
     const result = await getAllOrders(req);
 
     res.status(StatusCodes.OK).json({
-      orders: {
-        data: result.data,
+      data: {
+        order: result.data,
         pages: result.pages,
         total: result.total,
       },
