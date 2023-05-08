@@ -2,10 +2,10 @@ const UserRefreshToken = require('../../api/v1/userRefreshToken/model');
 const {
   createJWT,
   createTokenUser,
-  // isTokenValidRefreshToken, // ini belum ada
+  isTokenValidRefreshToken, // ini belum ada
 } = require('../../utils');
 const Users = require('../../api/v1/users/model');
-const { NotFoundError } = require('../../errors');
+const { NotFoundError, BadRequestError } = require('../../errors');
 
 const createUserRefreshToken = async (payload) => {
   const result = await UserRefreshToken.create(payload);
@@ -14,13 +14,19 @@ const createUserRefreshToken = async (payload) => {
 };
 
 const getUserRefreshToken = async (req) => {
-  const { refreshToken } = req.params;
+  const { refreshToken, email } = req.params;
 
   const result = await UserRefreshToken.findOne({ refreshToken });
 
   if (!result) throw new NotFoundError('refreshToken tidak valid');
 
-  const payload = isTokenValidRefreshToken(result.refreshToken);
+  
+  const payload = isTokenValidRefreshToken({ token: result.refreshToken });
+
+  if (email !== payload.email) {
+    throw new BadRequestError('Email tidak valid');
+  }
+
   const userCheck = await Users.findOne({ email: payload.email });
   const token = createJWT({ payload: createTokenUser(userCheck) });
   return token;
@@ -28,5 +34,5 @@ const getUserRefreshToken = async (req) => {
 
 module.exports = {
   createUserRefreshToken,
-  // getUserRefreshToken
+  getUserRefreshToken,
 };
